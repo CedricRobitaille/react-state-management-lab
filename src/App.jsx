@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./App.css"
 
 const team = [];
 let money = 100
@@ -89,33 +90,64 @@ const zombieFighters = [
 
 
 const App = () => {
+  const [moneyVal, setMoneyVal] = useState(money)
+  const [teamList, setTeamList] = useState(team);
+  const [zombieFighterList, setzombieFighterList] = useState(zombieFighters);
 
 
   const handleAddFighter = (fighterObj) => {
+    if (fighterObj.price <= moneyVal) {
+      // Spend money for the fighter
+      const moneytotal = moneyVal - fighterObj.price;
+      setMoneyVal(moneytotal)
 
+      // Add fighter to team
+      const newTeamListArray = [...teamList, fighterObj];
+      setTeamList(newTeamListArray);
+
+      // Remove fighter from fighter list
+      const newZombieFighterList = [...zombieFighterList];
+      const zombieIndex = newZombieFighterList.findIndex(element => element["id"] === fighterObj.id) // Find the array index the fighter comes from
+      newZombieFighterList.splice(zombieIndex, 1);  // remove the fighter from the list
+      setzombieFighterList(newZombieFighterList); // Update the fighter
+    } else {
+      console.log("Sorry, not enough money to buy this homie!")
+    }
   }
 
   return (
     <>
       <h1>Zombie Fighters</h1>
 
-      <h2>Money: {money}</h2>
+      <h2>Money: {moneyVal}</h2>
       <h2>Team Strength: </h2>
       <h2>Team Agility: </h2>
       <h2>Team: </h2>
-
+      <ul>
+        
+        {teamList.length > 0 ? teamList.map((teamMember,index) => (
+          <li key={index}>
+            <img src={teamMember.img} alt="" />
+            <h3>{teamMember.name}</h3>
+            <p><span>Price:</span> {teamMember.price}</p>
+            <p><span>Strength:</span> {teamMember.strength}</p>
+            <p><span>Agility:</span> {teamMember.agility}</p>
+          </li>
+        )) : <p>Pick some team members</p>}
+      </ul>
+      
       <h2>Fighters: </h2>
       <ul>
-        {zombieFighters.map((zombieFighter) => {
+        {zombieFighterList.map((zombieFighter) => (
           <li key={zombieFighter.id}>
-            <img src="" alt="" />
+            <img src={zombieFighter.img} alt="" />
             <h3>{zombieFighter.name}</h3>
             <p><span>Price:</span> {zombieFighter.price}</p>
             <p><span>Strength:</span> {zombieFighter.strength}</p>
             <p><span>Agility:</span> {zombieFighter.agility}</p>
-            <button>Add</button>
+            <button onClick={() => { handleAddFighter(zombieFighter)}}>Add</button>
           </li>
-        })}
+        ))}
       </ul>
     </>
     
