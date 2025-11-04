@@ -4,6 +4,7 @@ import "./App.css"
 const team = [];
 let totalMoney = 100
 let totalStrength = 0;
+let totalAgility = 0;
 
 const zombieFighters = [
   {
@@ -103,11 +104,14 @@ const App = () => {
       const newTeamListArray = [...teamList, fighterObj];
       setTeamList(newTeamListArray);
 
+      // Spend money for the fighter
+      totalMoney -= fighterObj.price;
+      
       // Add team Strength total
       totalStrength += fighterObj.strength;
 
-      // Spend money for the fighter
-      totalMoney -= fighterObj.price;
+      // Add team Agility total
+      totalAgility += fighterObj.agility;
 
 
 
@@ -130,7 +134,7 @@ const App = () => {
 
       <h2>Money: {totalMoney}</h2>
       <h2>Team Strength: {totalStrength}</h2>
-      <h2>Team Agility: </h2>
+      <h2>Team Agility: {totalAgility}</h2>
       <h2>Team: </h2>
       <ul>
         
