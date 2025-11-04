@@ -106,17 +106,12 @@ const App = () => {
 
       // Spend money for the fighter
       totalMoney -= fighterObj.price;
-      
+
       // Add team Strength total
       totalStrength += fighterObj.strength;
 
       // Add team Agility total
       totalAgility += fighterObj.agility;
-
-
-
-
-
 
       // Remove fighter from fighter list
       const newZombieFighterList = [...zombieFighterList];
@@ -128,6 +123,29 @@ const App = () => {
     }
   }
 
+  const handleRemoveFighter = (fighterObj) => {
+
+    // Add fighter to fighter list
+    const newZombieFighterList = [...zombieFighterList, fighterObj];
+    setzombieFighterList(newZombieFighterList);
+
+    // Refund money for the fighter
+    totalMoney += fighterObj.price;
+
+    // Remove team Strength total
+    totalStrength -= fighterObj.strength;
+
+    // Remove team Agility total
+    totalAgility -= fighterObj.agility;
+
+    // Remove fighter from team list
+    const newTeamListArray = [...teamList];
+    const teamIndex = newTeamListArray.findIndex(element => element["id"] === fighterObj.id) // Find the array index the fighter comes from
+    newTeamListArray.splice(teamIndex, 1);  // remove the fighter from the list
+    setTeamList(newTeamListArray); // Update the fighter
+
+  }
+
   return (
     <>
       <h1>Zombie Fighters</h1>
@@ -137,18 +155,19 @@ const App = () => {
       <h2>Team Agility: {totalAgility}</h2>
       <h2>Team: </h2>
       <ul>
-        
-        {teamList.length > 0 ? teamList.map((teamMember,index) => (
+
+        {teamList.length > 0 ? teamList.map((teamMember, index) => (
           <li key={index}>
             <img src={teamMember.img} alt="" />
             <h3>{teamMember.name}</h3>
             <p><span>Price:</span> {teamMember.price}</p>
             <p><span>Strength:</span> {teamMember.strength}</p>
             <p><span>Agility:</span> {teamMember.agility}</p>
+            <button onClick={() => { handleRemoveFighter(teamMember) }}>Remove</button>
           </li>
         )) : <p>Pick some team members</p>}
       </ul>
-      
+
       <h2>Fighters: </h2>
       <ul>
         {zombieFighterList.map((zombieFighter) => (
@@ -158,12 +177,12 @@ const App = () => {
             <p><span>Price:</span> {zombieFighter.price}</p>
             <p><span>Strength:</span> {zombieFighter.strength}</p>
             <p><span>Agility:</span> {zombieFighter.agility}</p>
-            <button onClick={() => { handleAddFighter(zombieFighter)}}>Add</button>
+            <button onClick={() => { handleAddFighter(zombieFighter) }}>Add</button>
           </li>
         ))}
       </ul>
     </>
-    
+
   );
 }
 
