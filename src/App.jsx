@@ -2,8 +2,8 @@ import { useState } from "react";
 import "./App.css"
 
 const team = [];
-const money = 100
-const strength = 0;
+let totalMoney = 100
+let totalStrength = 0;
 
 const zombieFighters = [
   {
@@ -92,25 +92,22 @@ const zombieFighters = [
 
 
 const App = () => {
-  const [moneyVal, setMoneyVal] = useState(money)
   const [teamList, setTeamList] = useState(team);
   const [zombieFighterList, setzombieFighterList] = useState(zombieFighters);
-  const [totalStrength, setTotalStrength] = useState(strength)
 
 
   const handleAddFighter = (fighterObj) => {
-    if (fighterObj.price <= moneyVal) {
-      // Spend money for the fighter
-      const moneytotal = moneyVal - fighterObj.price;
-      setMoneyVal(moneytotal)
+    if (fighterObj.price <= totalMoney) {
 
       // Add fighter to team
       const newTeamListArray = [...teamList, fighterObj];
       setTeamList(newTeamListArray);
 
       // Add team Strength total
-      setTotalStrength(totalStrength + fighterObj.strength)
+      totalStrength += fighterObj.strength;
 
+      // Spend money for the fighter
+      totalMoney -= fighterObj.price;
 
 
 
@@ -131,7 +128,7 @@ const App = () => {
     <>
       <h1>Zombie Fighters</h1>
 
-      <h2>Money: {moneyVal}</h2>
+      <h2>Money: {totalMoney}</h2>
       <h2>Team Strength: {totalStrength}</h2>
       <h2>Team Agility: </h2>
       <h2>Team: </h2>
